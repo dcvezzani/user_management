@@ -18,7 +18,7 @@ curl 'http://localhost:3000/api/users' \
   -H 'Accept-Language: en-US,en;q=0.5' \
   -H 'Connection: keep-alive' \
   -H 'Upgrade-Insecure-Requests: 1' \
-  --data '{"username":"samjones32","firstname":"Sam","lastname":"Jones"}'
+  --data '{"email":"samjones32@email.com","firstname":"Sam","lastname":"Jones"}'
 
 curl 'http://localhost:3000/api/users/58fa612a1e010524f00204ea' \
   -H 'Host: localhost:3000' \
@@ -37,7 +37,7 @@ curl 'http://localhost:3000/api/users/58fa612a1e010524f00204ea' \
   -H 'Accept-Language: en-US,en;q=0.5' \
   -H 'Connection: keep-alive' \
   -H 'Upgrade-Insecure-Requests: 1' \
-  --data '{"username":"samjones48","firstname":"Sam","lastname":"Jones"}'
+  --data '{"email":"samjones48@email.com","firstname":"Sam","lastname":"Jones"}'
 
 curl 'http://localhost:3000/api/users/58fa612a1e010524f00204ea' \
   -X DELETE \
