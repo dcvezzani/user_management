@@ -6,9 +6,6 @@ app = express();
 jwt = require('jsonwebtoken')
 crypto = require('crypto')
 mongoose = require('mongoose')
-Schema = mongoose.Schema
-bcrypt = require('bcrypt-nodejs')
-User = require('./models/user')
 config = require('./config/main');
 
 
@@ -38,7 +35,13 @@ app.use((req, res, next) ->
 
 # Database Connection
 mongoose.connect(config.database);  
-console.log 'Database connection ready'
+
+db = mongoose.connection
+db.on 'error', console.error.bind(console, 'connection error:')
+db.once 'open', ->
+  console.log 'Database connection ready'
+
+User = require('./models/user')
 
 server = app.listen(config.port, ->
   port = server.address().port
@@ -86,7 +89,7 @@ handleError = (res, reason, message, code) ->
   return
 
 app.get '/api/users', (req, res) ->
-  db.collection(USERS_COLLECTION).find({}).toArray (err, docs) ->
+  User.find (err, docs) ->
     if err
       handleError res, err.message, 'Failed to get users.'
     else
@@ -95,7 +98,7 @@ app.get '/api/users', (req, res) ->
 app.post '/api/users', (req, res) ->
   user = req.body
   console.dir user
-  db.collection(USERS_COLLECTION).insertOne user, (err, doc) ->
+  User.insertOne user, (err, doc) ->
     if err
       handleError res, err.message, 'Failed to create new user.'
     else
@@ -108,7 +111,7 @@ app.post '/api/users', (req, res) ->
 ###
 
 app.get '/api/users/:id', (req, res) ->
-  db.collection(USERS_COLLECTION).findOne { _id: new ObjectID(req.params.id) }, (err, doc) ->
+  User.findOne { _id: new ObjectID(req.params.id) }, (err, doc) ->
     if err
       handleError res, err.message, 'Failed to fetch user details.'
     else
@@ -119,7 +122,7 @@ app.put '/api/users/:id', (req, res) ->
   user = req.body;
   delete user._id;
 
-#   db.collection(USERS_COLLECTION).findOne { _id: new ObjectID(req.params.id) }, (err, doc) ->
+#   User.findOne { _id: new ObjectID(req.params.id) }, (err, doc) ->
 #     if err
 #       handleError res, err.message, 'Failed to update user.'
 #     else
@@ -127,14 +130,14 @@ app.put '/api/users/:id', (req, res) ->
 #       delete existingUser._id
 #       user = merge(existingUser, user)
 
-  db.collection(USERS_COLLECTION).updateOne { _id: new ObjectID(req.params.id) }, user, (err, results) ->
+  User.updateOne { _id: new ObjectID(req.params.id) }, user, (err, results) ->
     if err
       handleError res, err.message, 'Failed to update user.'
     else
       res.status(200).json results
 
 app.delete '/api/users/:id', (req, res) ->
-  db.collection(USERS_COLLECTION).deleteOne { _id: new ObjectID(req.params.id) }, (err, result) ->
+  User.deleteOne { _id: new ObjectID(req.params.id) }, (err, result) ->
     if err
       handleError res, err.message, 'Failed to delete user.'
     else

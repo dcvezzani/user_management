@@ -1,4 +1,5 @@
 mongoose = require('mongoose')
+bcrypt = require('bcrypt-nodejs')
 Schema = mongoose.Schema
 
 #================================
@@ -13,9 +14,12 @@ UserSchema = new Schema({
   password:
     type: String
     required: true
-  profile:
-    firstName: type: String
-    lastName: type: String
+  firstname: 
+    type: String
+    required: true
+  lastname: 
+    type: String
+    required: true
   role:
     type: String
     enum: [
