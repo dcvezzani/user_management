@@ -56,8 +56,5 @@ app.post '/users/:id', (req, res) ->
     console.log 'removed from database'
     res.redirect '/users'
 
-router = require('./router')
-
 #require('express-debug')(app, {})
-
-router(app);  
+    

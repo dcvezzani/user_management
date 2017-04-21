@@ -1,7 +1,7 @@
 jwt = require('jsonwebtoken')
 crypto = require('crypto')
-User = require('./models/user')
-config = require('./config/main')
+User = require('../models/user')
+config = require('../config/main')
 
 # Generate token
 
@@ -13,8 +13,8 @@ generateToken = (user) ->
 setUserInfo = (request) ->
   {
     _id: request._id
-    firstname: request.profile.firstname
-    lastname: request.profile.lastname
+    firstname: request.firstname
+    lastname: request.lastname
     email: request.email
     role: request.role
   }

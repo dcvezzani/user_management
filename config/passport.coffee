@@ -25,6 +25,10 @@ localLogin = new LocalStrategy(localOptions, (email, password, done) ->
   return
 )
 
+jwtOptions = 
+  jwtFromRequest: ExtractJwt.fromAuthHeader()
+  secretOrKey: config.secret
+
 # Setting up JWT login strategy
 jwtLogin = new JwtStrategy(jwtOptions, (payload, done) ->
   console.dir(payload);

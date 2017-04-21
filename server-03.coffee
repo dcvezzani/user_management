@@ -143,3 +143,13 @@ app.delete '/api/users/:id', (req, res) ->
     else
       res.status(200).json req.params
 
+router = require('./router')
+router(app);
+
+passportService = require('./config/passport')
+passport = require('passport')
+
+# Protect dashboard route with JWT
+app.get '/api/dashboard', passport.authenticate('jwt', session: false), (req, res) ->
+  res.send 'It worked! User id is: ' + req.user._id + '.'
+  return
