@@ -6,3 +6,7 @@ span{
   float: left;
   width: 100px;
 }
+
+.actions{
+  margin-top: 1em;
+}

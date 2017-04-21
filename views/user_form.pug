@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+html(lang='en')
+  head
+    meta(charset="UTF-8")
+    title= title
+    style
+      include ./app.css
+
+  body
+    h3= title
+      
+    form(action="/users", method=form_method)
+      input(type="text", placeholder="username", name="username", value=user.username)
+      input(type="text", placeholder="firstname", name="firstname", value=user.firstname)
+      input(type="text", placeholder="lastname", name="lastname", value=user.lastname)
+      button(type="submit") Submit
+
+    div.actions
+      a(href='/users') Cancel
+

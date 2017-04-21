@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+html(lang='en')
+  head
+    meta(charset="UTF-8")
+    title= title
+    style
+      include ./app.css
+
+  body
+    h3= title
+      
+    ul(class="users")
+      each user, index in users
+        li(class="user")
+          - var id_brev = user._id.toString().substring(1, 10) + '...';
+          span
+            a(href='/users/edit/'+user._id)= id_brev
+          span= user.username
+          span= user.firstname
+          span= user.lastname
+          form(action='/users/' + user._id, method='post')
+            input(type='submit', value='Delete')
+
+    a(href='/users/new') New user
+
