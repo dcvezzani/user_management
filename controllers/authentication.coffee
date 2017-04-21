@@ -84,3 +84,24 @@ exports.register = (req, res, next) ->
       return
     return
   return
+
+#========================================
+# Authorization Middleware
+#========================================
+# Role authorization check
+
+exports.roleAuthorization = (role) ->
+  (req, res, next) ->
+    user = req.user
+    User.findById user._id, (err, foundUser) ->
+      if err
+        res.status(422).json error: 'No user was found.'
+        return next(err)
+
+      # If user is found, check role.
+      if foundUser.role == role
+        return next()
+
+      res.status(401).json error: 'You are not authorized to view this content.'
+      next 'Unauthorized'
+    return  
