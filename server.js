@@ -11,17 +11,17 @@ app.use(bodyParser.urlencoded({extended: true}))
 
 var db
 
-MongoClient.connect('link-to-mongodb', function(err, database) {
+MongoClient.connect('link-to-mongodb', (err, database) -> {
   if (err) return console.log(err)
-  app.listen(3000, function() {
+  app.listen(3000, () -> {
     console.log('listening on 3000')
   })
 })
 
-app.get('/', function(req, res) {
+app.get('/', (req, res) -> {
   res.sendFile(__dirname + '/index.html')
 })
 
-app.post('/quotes', function(req, res) {
+app.post('/quotes', (req, res) -> {
   console.log(req.body)
 })
