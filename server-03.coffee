@@ -98,11 +98,11 @@ app.get '/api/users', (req, res) ->
 app.post '/api/users', (req, res) ->
   user = req.body
   console.dir user
-  User.insertOne user, (err, doc) ->
+  User.create user, (err, doc) ->
     if err
       handleError res, err.message, 'Failed to create new user.'
     else
-      res.status(201).json(doc.ops[0]);
+      res.status(201).json(doc);
 
 ###  "/api/users/:id"
 #    GET: find user by id
