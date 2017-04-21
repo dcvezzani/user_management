@@ -3,11 +3,14 @@ merge = require('merge')
 logger = require('morgan')
 bodyParser= require('body-parser')
 app = express();
-config = require('./config/main');
-
+jwt = require('jsonwebtoken')
+crypto = require('crypto')
 mongoose = require('mongoose')
 Schema = mongoose.Schema
 bcrypt = require('bcrypt-nodejs')
+User = require('./models/user')
+config = require('./config/main');
+
 
 MongoClient = require('mongodb').MongoClient
 db = ''
