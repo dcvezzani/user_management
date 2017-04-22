@@ -48,13 +48,6 @@ server = app.listen config.get('port'), ->
   console.log 'App now running on port', port
   return
 
-# Generic error handler used by all endpoints.
-
-handleError = (res, reason, message, code) ->
-  console.log 'ERROR: ' + reason
-  res.status(code or 500).json 'error': message
-  return
-
 router = require('./router')
 router(app);
 

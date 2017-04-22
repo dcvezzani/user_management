@@ -69,7 +69,6 @@ filterOutAttrs = (records, email, names) ->
     i++  
   return target_record
 
-
 describe 'Users', ->
   beforeEach (done) ->
 
@@ -88,9 +87,11 @@ describe 'Users', ->
     it 'it should GET all the users (== 1)', (done) ->
       chai.request(server).get('/api/users')
       .set('Authorization', token).end (err, res) ->
+
         res.should.have.status 200
         res.body.should.be.a 'array'
         res.body.length.should.be.eql 1
+
         done()
         return
       return
@@ -102,12 +103,14 @@ describe 'Users', ->
 
       chai.request(server).get('/api/users')
       .set('Authorization', token).end (err, res) ->
+
         res.should.have.status 200
         res.body.should.be.a 'array'
         res.body.length.should.be.eql 4
 
         attrs = filterOutAttrs res.body, 'joe@gmail.com', ['_id', '__v', 'createdAt', 'updatedAt', 'password']
         attrs.should.be.eql { "email": "joe@gmail.com", "firstname": "Joe", "lastname": "Shmoe", "role": "Member" }
+
         done()
         return
       return
@@ -115,12 +118,46 @@ describe 'Users', ->
   # Test the /POST route (create)
 
   describe 'POST /users', ->
+    user_attrs = {"email":"joe@gmail.com","password":"pass","firstname":"Joe","lastname":"Shmoe","role":"Member"}
+    user_attrs_minus_email = {"password":"pass","firstname":"Joe","lastname":"Shmoe","role":"Member"}
+
     it 'it should create a new user', (done) ->
       chai.request(server).post('/api/users')
-      .send({"email":"joe@gmail.com","password":"pass","firstname":"Joe","lastname":"Shmoe","role":"Member"})
+      .send(user_attrs)
       .set('Authorization', token).end (err, res) ->
-        res.should.have.status 201
 
+        res.should.have.status 201
+        attrs = filterOutAttrs [res.body], 'joe@gmail.com', ['_id', '__v', 'createdAt', 'updatedAt', 'password']
+        attrs.should.be.eql { "email": "joe@gmail.com", "firstname": "Joe", "lastname": "Shmoe", "role": "Member" }
+
+        done()
+        return
+      return
+
+    # TODO: validation reporting needs some tweaking
+    xit 'it should prevent duplicate emails', (done) ->
+      User.create user_attrs, (err, doc) ->
+        chai.request(server).post('/api/users')
+        .send(user_attrs)
+        .set('Authorization', token).end (err, res) ->
+
+          res.should.have.status 201
+          attrs = filterOutAttrs [res.body], 'joe@gmail.com', ['_id', '__v', 'createdAt', 'updatedAt', 'password']
+          attrs.should.be.eql { "email": "joe@gmail.com", "firstname": "Joe", "lastname": "Shmoe", "role": "Member" }
+
+          done()
+          return
+        return
+      return
+
+    # TODO: validation reporting needs some tweaking
+    xit 'it should require email', (done) ->
+      chai.request(server).post('/api/users')
+      .send(user_attrs_minus_email)
+      .set('Authorization', token).end (err, res) ->
+
+        console.log res.body
+        res.should.have.status 201
         attrs = filterOutAttrs [res.body], 'joe@gmail.com', ['_id', '__v', 'createdAt', 'updatedAt', 'password']
         attrs.should.be.eql { "email": "joe@gmail.com", "firstname": "Joe", "lastname": "Shmoe", "role": "Member" }
 
@@ -140,8 +177,9 @@ describe 'Users', ->
 
       outcomeFindUserByEmail.then (data) ->
         user = data['found-user']
-        done()
 
+        done()
+        return
       return
   
     it 'it should update an existing user', (done) ->
@@ -150,17 +188,57 @@ describe 'Users', ->
       chai.request(server).put('/api/users/' + user._id)
       .send({"email":joe_email,"password":"pass","firstname":"Joe","lastname":"Shmoe","role":"Admin"})
       .set('Authorization', token).end (err, res) ->
-        res.should.have.status 200
-
         User.findOne { "email":joe_email }, (err, doc) ->
-          if err
-            handleError res, err.message, 'Failed to fetch user details.'
-            done()
-          else
+
+            res.should.have.status 200
             attrs = filterOutAttrs [doc._doc], joe_email, ['_id', '__v', 'createdAt', 'updatedAt', 'password']
             attrs.should.be.eql { "email": joe_email, "firstname": "Joe", "lastname": "Shmoe", "role": "Admin" }
+
             done()
+            return
           return
+        return
+      return
+
+    # TODO: needs better reporting; should be reporting 404, not 500
+    xit 'it should handle non-existing user ids', (done) ->
+      chai.request(server).put('/api/users/999')
+      .send({"email":joe_email,"password":"pass","firstname":"Joe","lastname":"Shmoe","role":"Admin"})
+      .set('Authorization', token).end (err, res) ->
+
+            res.should.have.status 404
+
+            done()
+            return
+          return
+        return
+      return
+
+  # Test the /GET/:id route
+  #
+  describe 'GET /users/:id', ->
+    user = null
+    joe_email = "joe@gmail.com"
+
+    beforeEach (done) ->
+      outcomeFindUserByEmail = createUser().then (data) ->
+        return findUserByEmail(data, joe_email)
+
+      outcomeFindUserByEmail.then (data) ->
+        user = data['found-user']
+        done()
+        return
+      return
+  
+    it 'it should display/show an existing user', (done) ->
+      chai.request(server).get('/api/users/' + user._id)
+      .set('Authorization', token).end (err, res) ->
+
+        res.should.have.status 200
+        attrs = filterOutAttrs [user], joe_email, ['_id', '__v', 'createdAt', 'updatedAt', 'password']
+        attrs.should.be.eql { "email": joe_email, "firstname": "Joe", "lastname": "Shmoe", "role": "Member" }
+
+        done()
         return
       return
 
@@ -224,3 +302,4 @@ describe 'Users', ->
           return
         return
       return
+
