@@ -13,6 +13,7 @@
     "crypto": "0.0.3",
     "ejs": "^2.5.6",
     "express": "^4.15.2",
+    "fs": "0.0.1-security",
     "jsonwebtoken": "^7.3.0",
     "merge": "^1.2.0",
     "mongoose": "^4.9.5",
@@ -20,7 +21,8 @@
     "passport": "^0.3.2",
     "passport-jwt": "^2.2.1",
     "passport-local": "^1.0.0",
-    "pug": "^2.0.0-beta.12"
+    "pug": "^2.0.0-beta.12",
+    "winston": "^2.3.1"
   },
   "devDependencies": {
     "chai": "^3.5.0",
@@ -30,8 +32,8 @@
     "nodemon": "^1.11.0"
   },
   "scripts": {
-    "dev": "NODE_ENV=dev PORT=3000 MONGODB_URI=mongodb://localhost/user_management nodemon server.coffee", 
+    "dev": "NODE_ENV=dev PORT=3000 MONGODB_URI=mongodb://localhost/user_management nodemon server.coffee",
     "xstart": "SET NODE_ENV=dev && node server.js",
-    "test": "mocha --timeout 10000"
-  }  
+    "test": "mocha --timeout 10000 --compilers coffee:coffee-script/register -- test/*.coffee"
+  }
 }

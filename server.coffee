@@ -1,6 +1,5 @@
 express = require('express')
 merge = require('merge')
-logger = require('morgan')
 bodyParser= require('body-parser')
 config = require('config')
 app = express();
@@ -8,6 +7,10 @@ jwt = require('jsonwebtoken')
 crypto = require('crypto')
 mongoose = require('mongoose')
 
+if config.util.getEnv('NODE_ENV') != 'test'
+  # setup the logger
+  logger = require('./logging').logger
+  require('./logging').setupLogger(app)
 
 MongoClient = require('mongodb').MongoClient
 db = ''
@@ -19,9 +22,6 @@ app.set('views', './views')
 
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
-
-# Setting up basic middleware for all Express requests
-app.use(logger 'dev') # Log requests to API using morgan
 
 # Enable CORS from client-side
 app.use((req, res, next) ->
@@ -57,3 +57,6 @@ handleError = (res, reason, message, code) ->
 
 router = require('./router')
 router(app);
+
+# for testing
+module.exports = app

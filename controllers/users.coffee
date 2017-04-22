@@ -18,7 +18,6 @@ exports.list = (req, res, next) ->
 
 exports.create = (req, res, next) ->
   user = req.body
-  console.dir user
   User.create user, (err, doc) ->
     if err
       handleError res, err.message, 'Failed to create new user.'
@@ -56,8 +55,6 @@ exports.show = (req, res, next) ->
 #========================================
 
 exports.destroy = (req, res, next) ->
-  return res.status(200).json req.params
-
   User.deleteOne { _id: new ObjectID(req.params.id) }, (err, result) ->
     if err
       handleError res, err.message, 'Failed to delete user.'

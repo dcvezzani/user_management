@@ -31,7 +31,6 @@ jwtOptions =
 
 # Setting up JWT login strategy
 jwtLogin = new JwtStrategy(jwtOptions, (payload, done) ->
-  console.dir(payload);
   User.findById payload._id, (err, user) ->
     if err
       return done(err, false)
