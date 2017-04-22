@@ -2,11 +2,11 @@ express = require('express')
 merge = require('merge')
 logger = require('morgan')
 bodyParser= require('body-parser')
+config = require('config')
 app = express();
 jwt = require('jsonwebtoken')
 crypto = require('crypto')
 mongoose = require('mongoose')
-config = require('./config/main');
 
 
 MongoClient = require('mongodb').MongoClient
@@ -33,7 +33,7 @@ app.use((req, res, next) ->
 )
 
 # Database Connection
-mongoose.connect(config.database);  
+mongoose.connect(config.get 'database')
 db = mongoose.connection
 db.on 'error', console.error.bind(console, 'connection error:')
 db.once 'open', ->
@@ -43,11 +43,10 @@ db.once 'open', ->
 User = require('./models/user')
 
 # Start server
-server = app.listen(config.port, ->
+server = app.listen config.get('port'), ->
   port = server.address().port
   console.log 'App now running on port', port
   return
-)
 
 # Generic error handler used by all endpoints.
 

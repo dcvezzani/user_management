@@ -1,7 +1,7 @@
 # Importing Passport, strategies, and config
 passport = require('passport')
 User = require('../models/user')
-config = require('./main')
+config = require('config')
 JwtStrategy = require('passport-jwt').Strategy
 ExtractJwt = require('passport-jwt').ExtractJwt
 LocalStrategy = require('passport-local')
@@ -27,7 +27,7 @@ localLogin = new LocalStrategy(localOptions, (email, password, done) ->
 
 jwtOptions = 
   jwtFromRequest: ExtractJwt.fromAuthHeader()
-  secretOrKey: config.secret
+  secretOrKey: config.get('secret')
 
 # Setting up JWT login strategy
 jwtLogin = new JwtStrategy(jwtOptions, (payload, done) ->
