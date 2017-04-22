@@ -1,6 +1,7 @@
-~/Dropbox/journal/current/20170421-curl-examples.md
-curl examples
+## Without authentication
 
+CRUD examples
+```
 curl 'http://localhost:3000/api/users' \
   -H 'Host: localhost:3000' \
   -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:52.0) Gecko/20100101 Firefox/52.0' \
@@ -48,7 +49,10 @@ curl 'http://localhost:3000/api/users/58fa82cac9b48acd898564d4' \
   -H 'Accept-Language: en-US,en;q=0.5' \
   -H 'Connection: keep-alive' \
   -H 'Upgrade-Insecure-Requests: 1'
+```
 
+Register
+```
 curl 'http://localhost:3000/api/auth/register' \
   -X POST \
   -H 'Host: localhost:3000' \
@@ -58,17 +62,12 @@ curl 'http://localhost:3000/api/auth/register' \
   -H 'Accept-Language: en-US,en;q=0.5' \
   -H 'Connection: keep-alive' \
   -H 'Upgrade-Insecure-Requests: 1' \
+  --data '{"email":"dcvezzani@gmail.com","firstname":"Dave","lastname":"Vezzani","password":"pass"}'
   --data '{"email":"samjones55@email.com","firstname":"Sam","lastname":"Zeta-Jones","password":"pass"}'
+```
 
-curl 'http://localhost:3000/api/dashboard' \
-  -H 'Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1OGZhOTE4MGQxOGUyM2QwZTZjZjRkMTUiLCJmaXJzdG5hbWUiOiJTYW0iLCJsYXN0bmFtZSI6IlpldGEtSm9uZXMiLCJlbWFpbCI6InNhbWpvbmVzNTVAZW1haWwuY29tIiwicm9sZSI6Ik1lbWJlciIsImlhdCI6MTQ5MjgxNjI1NywiZXhwIjoxNDkyODI2MzM3fQ.DLvqA3CUviB8JTxlg6NQuImJFaXTEfxxPUszbHMkTPs' \
-  -H 'Host: localhost:3000' \
-  -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:52.0) Gecko/20100101 Firefox/52.0' \
-  -H 'Accept: application/json' \
-  -H 'Accept-Language: en-US,en;q=0.5' \
-  -H 'Connection: keep-alive' \
-  -H 'Upgrade-Insecure-Requests: 1'
-
+Login
+```
 curl 'http://localhost:3000/api/auth/login' \
   -X POST \
   -H 'Host: localhost:3000' \
@@ -79,6 +78,11 @@ curl 'http://localhost:3000/api/auth/login' \
   -H 'Connection: keep-alive' \
   -H 'Upgrade-Insecure-Requests: 1' \
   --data '{"email":"dcvezzani@gmail.com","password":"pass"}'
+```
+
+---
+
+Whether registering or logging in, a token is returned if the username/password is successful
 
 Response
 ```
@@ -94,24 +98,12 @@ Response
 }
 ```
 
-curl 'http://localhost:3000/api/dashboard' \
-  -H 'Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1OGZhODE2ZTgwNGNhOGNiYjdkZGNiNmIiLCJmaXJzdG5hbWUiOiJEYXZpZCIsImxhc3RuYW1lIjoiVmV6emFuaSIsImVtYWlsIjoiZGN2ZXp6YW5pQGdtYWlsLmNvbSIsInJvbGUiOiJNZW1iZXIiLCJpYXQiOjE0OTI4MTYzMjMsImV4cCI6MTQ5MjgyNjQwM30.ALowu5bWZ-1zOlMD1GVg8N8cC_onc0_FWiIMkWlKLYg' \
-  -H 'Host: localhost:3000' \
-  -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:52.0) Gecko/20100101 Firefox/52.0' \
-  -H 'Accept: application/json' \
-  -H 'Accept-Language: en-US,en;q=0.5' \
-  -H 'Connection: keep-alive' \
-  -H 'Upgrade-Insecure-Requests: 1'
+## With authentication
 
-Response
+CRUD examples
 ```
-It worked! User id is: 58fa816e804ca8cbb7ddcb6b.%
-```
-
-
-
 curl 'http://localhost:3000/api/users' \
-  -H 'Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1OGZhODE2ZTgwNGNhOGNiYjdkZGNiNmIiLCJmaXJzdG5hbWUiOiJEYXZpZCIsImxhc3RuYW1lIjoiVmV6emFuaSIsImVtYWlsIjoiZGN2ZXp6YW5pQGdtYWlsLmNvbSIsInJvbGUiOiJNZW1iZXIiLCJpYXQiOjE0OTI4MjA0NjYsImV4cCI6MTQ5MjgzMDU0Nn0.V_NICDhZBnlAVsI4Wz2XlPyAoCQPx1qggfeI7uNtfbE' \
+  -H 'Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1OGZiODZkZGMwMWFmYTJlZjQwODMwN2IiLCJmaXJzdG5hbWUiOiJEYXZlIiwibGFzdG5hbWUiOiJWZXp6YW5pIiwiZW1haWwiOiJkY3ZlenphbmlAZ21haWwuY29tIiwicm9sZSI6IkFkbWluIiwiaWF0IjoxNDkyODc5MTk2LCJleHAiOjE0OTI4ODkyNzZ9.As5Ro-keS5WXTEGr-vr8pdniVcJ4_FbBrv8h9gzaxs4' \
   -H 'Host: localhost:3000' \
   -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:52.0) Gecko/20100101 Firefox/52.0' \
   -H 'Accept: application/json' \
@@ -121,7 +113,7 @@ curl 'http://localhost:3000/api/users' \
 
 curl 'http://localhost:3000/api/users' \
   -X POST \
-  -H 'Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1OGZhODE2ZTgwNGNhOGNiYjdkZGNiNmIiLCJmaXJzdG5hbWUiOiJEYXZpZCIsImxhc3RuYW1lIjoiVmV6emFuaSIsImVtYWlsIjoiZGN2ZXp6YW5pQGdtYWlsLmNvbSIsInJvbGUiOiJNZW1iZXIiLCJpYXQiOjE0OTI4MjA0NjYsImV4cCI6MTQ5MjgzMDU0Nn0.V_NICDhZBnlAVsI4Wz2XlPyAoCQPx1qggfeI7uNtfbE' \
+  -H 'Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1OGZiODZkZGMwMWFmYTJlZjQwODMwN2IiLCJmaXJzdG5hbWUiOiJEYXZlIiwibGFzdG5hbWUiOiJWZXp6YW5pIiwiZW1haWwiOiJkY3ZlenphbmlAZ21haWwuY29tIiwicm9sZSI6IkFkbWluIiwiaWF0IjoxNDkyODc5MTk2LCJleHAiOjE0OTI4ODkyNzZ9.As5Ro-keS5WXTEGr-vr8pdniVcJ4_FbBrv8h9gzaxs4' \
   -H 'Host: localhost:3000' \
   -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:52.0) Gecko/20100101 Firefox/52.0' \
   -H 'Accept: application/json' \
@@ -129,7 +121,7 @@ curl 'http://localhost:3000/api/users' \
   -H 'Accept-Language: en-US,en;q=0.5' \
   -H 'Connection: keep-alive' \
   -H 'Upgrade-Insecure-Requests: 1' \
-  --data '{"email":"samjones66@email.com","firstname":"Sam","lastname":"Jones","password":"pass"}'
+  --data '{"email":"samjones68@email.com","firstname":"Sam","lastname":"Jones","password":"pass"}'
 
 curl 'http://localhost:3000/api/users/58fa82cac9b48acd898564d4' \
   -H 'Host: localhost:3000' \
@@ -160,7 +152,9 @@ curl 'http://localhost:3000/api/users/58faa53691c029d7bab24e5e' \
   -H 'Accept-Language: en-US,en;q=0.5' \
   -H 'Connection: keep-alive' \
   -H 'Upgrade-Insecure-Requests: 1'
+```
 
+### Testing out role-based authorization
 
 Set user role to 'Member'
 ```
@@ -171,9 +165,11 @@ Set user role to 'Member'
 ```
 mongo user_management
 db.users.update(
-   { "_id": ObjectId('58fa816e804ca8cbb7ddcb6b') },
-   { role: "Member" },
-   { upsert: true }
+   { "_id": ObjectId('58fb86ddc01afa2ef408307b') },
+   {
+     $set: { role: "Member" }
+   },
+   { upsert: true }   
 )
 ```
 
@@ -181,9 +177,11 @@ Set user role to 'Admin'
 ```
 mongo user_management
 db.users.update(
-   { "_id": ObjectId('58fa816e804ca8cbb7ddcb6b') },
-   { role: "Admin" },
-   { upsert: true }
+   { "_id": ObjectId('58fb86ddc01afa2ef408307b') },
+   {
+     $set: { role: "Admin" }
+   },
+   { upsert: true }   
 )
 ```
 

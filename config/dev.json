@@ -4,6 +4,6 @@
   // Database connection information
   'database': 'mongodb://localhost/user_management',
   // Setting port for server
-  'port': 3000
+  'port': 3002
 }
 

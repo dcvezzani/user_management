@@ -1,5 +1,6 @@
 .*.sw*
 .sw*
 node_modules/
+node_modulesx/
 .DS_Store
 access.log
