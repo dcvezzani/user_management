@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
-    "dev": "NODE_ENV=dev PORT=3000 MONGODB_URI=mongodb://localhost/user_management nodemon server.coffee"
-  },
   "author": "",
   "license": "ISC",
   "dependencies": {
@@ -31,5 +28,10 @@
     "express-debug": "^1.1.1",
     "mocha": "^3.2.0",
     "nodemon": "^1.11.0"
-  }
+  },
+  "scripts": {
+    "dev": "NODE_ENV=dev PORT=3000 MONGODB_URI=mongodb://localhost/user_management nodemon server.coffee", 
+    "xstart": "SET NODE_ENV=dev && node server.js",
+    "test": "mocha --timeout 10000"
+  }  
 }
