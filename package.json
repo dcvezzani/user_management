@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "PORT=3000 MONGODB_URI=mongodb://localhost/user_management nodemon server-03.coffee"
+    "dev": "PORT=3000 MONGODB_URI=mongodb://localhost/user_management nodemon server.coffee"
   },
   "author": "",
   "license": "ISC",

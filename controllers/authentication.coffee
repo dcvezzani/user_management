@@ -91,7 +91,7 @@ exports.register = (req, res, next) ->
 # Role authorization check
 
 exports.roleAuthorization = (role) ->
-  (req, res, next) ->
+  return (req, res, next) ->
     user = req.user
     User.findById user._id, (err, foundUser) ->
       if err
@@ -103,5 +103,4 @@ exports.roleAuthorization = (role) ->
         return next()
 
       res.status(401).json error: 'You are not authorized to view this content.'
-      next 'Unauthorized'
-    return  
+      return next 'Unauthorized'

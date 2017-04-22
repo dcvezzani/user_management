@@ -34,6 +34,7 @@ UserSchema = new Schema({
 }, timestamps: true)
 
 # Pre-save of user to database, hash password if password is modified or new
+
 UserSchema.pre 'save', (next) ->
   user = this
   SALT_FACTOR = 5
@@ -50,7 +51,6 @@ UserSchema.pre 'save', (next) ->
       return
     return
   return
-
 
 # Method to compare password for login
 

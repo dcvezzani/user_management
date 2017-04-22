@@ -1,60 +1,60 @@
-console.log('May Node be with you')
-
-express = require('express');
+express = require('express')
+merge = require('merge')
+logger = require('morgan')
 bodyParser= require('body-parser')
 app = express();
+jwt = require('jsonwebtoken')
+crypto = require('crypto')
+mongoose = require('mongoose')
+config = require('./config/main');
+
 
 MongoClient = require('mongodb').MongoClient
+db = ''
+
+USERS_COLLECTION = 'users'
 
 app.set('view engine', 'pug')
 app.set('views', './views')
 
 app.use(bodyParser.urlencoded({extended: true}))
+app.use(bodyParser.json())
 
-db = ''
-ObjectId = require('mongodb').ObjectID;
+# Setting up basic middleware for all Express requests
+app.use(logger 'dev') # Log requests to API using morgan
 
-MongoClient.connect 'mongodb://localhost/user_management', (err, database) ->
-  if err
-    return console.log(err)
-  db = database
-  app.listen 3000, ->
-    console.log 'listening on 3000'
+# Enable CORS from client-side
+app.use((req, res, next) ->
+  res.header "Access-Control-Allow-Origin", "*"
+  res.header 'Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS'
+  res.header "Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization, Access-Control-Allow-Credentials"
+  res.header "Access-Control-Allow-Credentials", "true"
+  next()
+)
 
-app.get '/', (req, res) ->
-  res.redirect '/users'
+# Database Connection
+mongoose.connect(config.database);  
+db = mongoose.connection
+db.on 'error', console.error.bind(console, 'connection error:')
+db.once 'open', ->
+  console.log 'Database connection ready'
 
-app.get '/users/new', (req, res) ->
-  #user = {username: 'aaa-username', firstname: 'aaa-firstname', lastname: 'aaa-lastname'}
-  user = {}
-  res.render('user_form', user: user, form_method: 'post', title: 'Create new user')
-    
-app.get '/users/edit/:id', (req, res) ->
-  console.log "Parameters: "
-  console.dir req.params
-  cursor = db.collection('users').findOne {_id: ObjectId(req.params.id)}, (err, user) ->
-    res.render('user_form', user: user, form_method: 'put', title: 'Edit user')
-    
-app.get '/users', (req, res) ->
-  cursor = db.collection('users').find().toArray (err, results) ->
-    if err
-      return console.log(err)
-    res.render('user_list', users: results, title: 'List users')
-    
-app.post '/users', (req, res) ->
-  console.log 'creating new user'
-  db.collection('users').save req.body, (err, result) ->
-    if err
-      return console.log(err)
-    console.log 'saved to database'
-    res.redirect '/users'
+# User model
+User = require('./models/user')
 
-app.post '/users/:id', (req, res) ->
-  db.collection('users').deleteOne {_id: ObjectId(req.params.id)}, (err, result) ->
-    if err
-      return console.log(err)
-    console.log 'removed from database'
-    res.redirect '/users'
+# Start server
+server = app.listen(config.port, ->
+  port = server.address().port
+  console.log 'App now running on port', port
+  return
+)
 
-#require('express-debug')(app, {})
-    
+# Generic error handler used by all endpoints.
+
+handleError = (res, reason, message, code) ->
+  console.log 'ERROR: ' + reason
+  res.status(code or 500).json 'error': message
+  return
+
+router = require('./router')
+router(app);
