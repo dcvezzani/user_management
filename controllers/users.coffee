@@ -1,5 +1,4 @@
 User = require('../models/user')
-config = require('../config/main')
 ObjectID = require('mongodb').ObjectID
 
 #========================================

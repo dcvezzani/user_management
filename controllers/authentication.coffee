@@ -1,12 +1,12 @@
 jwt = require('jsonwebtoken')
 crypto = require('crypto')
 User = require('../models/user')
-config = require('../config/main')
+config = require('config')
 
 # Generate token
 
 generateToken = (user) ->
-  jwt.sign user, config.secret, expiresIn: 10080
+  jwt.sign user, config.get('secret'), expiresIn: 10080
 
 # Set user info from request
 
